@@ -1,6 +1,6 @@
 import {Router} from "express"
-import Test from "../models/testModel";
-import generateJeeQuestion from "../utils/generateJeeQuestion";
+import Test from "../models/testModel.js";
+import generateJeeQuestion from "../utils/generateJeeQuestion.js";
 
 const router = Router();
 
