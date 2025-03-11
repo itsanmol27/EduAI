@@ -5,7 +5,7 @@ async function generateJeeQuestion(difficulty , subject , topic) {
 
     const messages = [
         ["system", system_message],
-        ["human", "Generate a JSON array of subjects where each subject contains an array of 5 questions of each topics. Each question should have the following properties: `topic`, `question`, `options`, `answer`, and `solution`. Ensure the options are multiple choice. Use real-world problems in different subjects such as Physics, Chemistry, and Mathematics. For each subject, include multiple topics, and generate 5 questions for each topic."]
+        ["human", "Generate a JSON array of questions add 5 questions of each subject. Each question should have the following properties: `topic`, `question`, `options`, `answer`, and `solution`. Ensure the options are multiple choice. Answer should be index from options."]
     ]
 
     try {

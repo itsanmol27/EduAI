@@ -22,7 +22,7 @@ router.post("/generate" , async (req,res) => {
         const testData = {userId:"1" , questions}
         const newtest = new Test(testData)
         const test = await newtest.save();
-        res.status(200).json({ test , status:true });
+        res.status(200).json({ test, status:true });
     } catch (error) {
         console.log('Error parsing JSON:', error);
         res.status(500).json({ error: 'Failed to parse question data' , status:false });
