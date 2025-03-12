@@ -1,6 +1,7 @@
 import {Router} from "express"
 import Test from "../models/testModel.js";
 import generateJeeQuestion from "../utils/generateJeeQuestion.js";
+import analyseTest from "../utils/analyseTest.js";
 
 const router = Router();
 
@@ -30,16 +31,17 @@ router.post("/generate" , async (req,res) => {
 })
 
 router.post("/submit" , async (req,res)=>{
-    const {answers , testId} = req.body;
+    let {answers , testId} = req.body;
 
+    answers = answers.map(Number);
     const test = await Test.findById(testId);
     if(test){
 
         try {
-        
             test.answers = answers;
             await test.save();
-            return res.json({status:true})
+            await analyseTest(test);
+            return res.json({test ,status:true})
 
         } catch (error) {
             console.log(error);
