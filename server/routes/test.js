@@ -1,6 +1,6 @@
 import {Router} from "express"
 import Test from "../models/testModel.js";
-import generateJeeQuestion from "../utils/generateJeeQuestion.js";
+import generateQuestion from "../utils/generateQuestion.js";
 import analyseTest from "../utils/analyseTest.js";
 
 const router = Router();
@@ -9,7 +9,7 @@ router.post("/generate" , async (req,res) => {
     let {difficulty , subjects , topics} = req.body;
     subjects = Array.isArray(subjects) ? subjects : [subjects];
     topics = Array.isArray(topics) ? topics : [topics];
-    const question = await generateJeeQuestion(difficulty , subjects , topics);
+    const question = await generateQuestion(difficulty , subjects , topics);
 
     let questionContent = question.content;
 

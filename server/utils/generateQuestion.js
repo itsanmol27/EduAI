@@ -1,7 +1,7 @@
 import llm from "./llmProvider.js";
 
-async function generateJeeQuestion(difficulty , subject , topic) {
-    const system_message = `You are an expert professor who generates ${difficulty} level JEE questions in ${subject} on the topic ${topic}. Generate an appropriate question along with the correct answer.`
+async function generateQuestion(difficulty , subject , topic) {
+    const system_message = `You are an expert professor who generates ${difficulty} level questions in ${subject} on the topic ${topic}. Generate an appropriate question along with the correct answer.`
 
     const messages = [
         ["system", system_message],
@@ -16,4 +16,4 @@ async function generateJeeQuestion(difficulty , subject , topic) {
     }
 }
 
-export default generateJeeQuestion
+export default generateQuestion
