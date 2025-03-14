@@ -20,6 +20,6 @@ app.get('/', (req, res) => {
     return res.json({ message: 'Hello World' });
 })
 
-app.listen(4000, () => {
-    console.log('Server started on http://localhost:4000');
+app.listen(process.env.PORT, () => {
+    console.log('Server started');
 })
