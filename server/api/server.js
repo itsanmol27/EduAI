@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import TestRoute from "./routes/test.js"
-import DoubtRoute from "./routes/doubt.js"
-import dbConnect from './utils/dbConnect.js';
+import TestRoute from "../routes/test.js"
+import DoubtRoute from "../routes/doubt.js"
+import dbConnect from '../utils/dbConnect.js';
 import cors from "cors"
 import fileUpload from 'express-fileupload';
 
