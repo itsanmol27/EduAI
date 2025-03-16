@@ -2,14 +2,39 @@ import {Router} from "express"
 import Test from "../models/testModel.js";
 import generateQuestion from "../utils/generateQuestion.js";
 import analyseTest from "../utils/analyseTest.js";
+import generateQuestionwithContext from "../utils/generateQuestionwithContext.js";
 
 const router = Router();
 
 router.post("/generate" , async (req,res) => {
-    let {difficulty , subjects , topics} = req.body;
+    let {difficulty , subjects , topics , language} = req.body;
     subjects = Array.isArray(subjects) ? subjects : [subjects];
     topics = Array.isArray(topics) ? topics : [topics];
-    const question = await generateQuestion(difficulty , subjects , topics);
+    const question = await generateQuestion(difficulty , subjects , topics , language);
+
+    let questionContent = question.content;
+
+    questionContent = questionContent.trim();
+
+    questionContent = questionContent.replace(/```json/g, '').replace(/```/g, '');
+
+    try {
+        const questions = JSON.parse(questionContent);
+        console.log(JSON.stringify(questions));
+        const testData = {userId:"1" , questions}
+        const newtest = new Test(testData)
+        const test = await newtest.save();
+        res.status(200).json({ test, status:true });
+    } catch (error) {
+        console.log('Error parsing JSON:', error);
+        res.status(500).json({ error: 'Failed to parse question data' , status:false });
+    }
+})
+
+router.post("/generate/context" , async (req,res) => {
+    const {context, difficulty} = req.body;
+
+    const question = await generateQuestionwithContext(difficulty , context);
 
     let questionContent = question.content;
 

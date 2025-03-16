@@ -1,12 +1,12 @@
 import llm from "./llmProvider.js";
 
-async function generateQuestion(difficulty , subject , topic) {
-    const system_message = `You are an expert professor who generates ${difficulty} level questions in ${subject} on the topic ${topic}. Generate an appropriate question along with the correct answer.`
+async function generateQuestion(difficulty, subject, topic, language) {
+    const system_message = `Generate 5 multiple choice ${difficulty} questions in ${subject} on ${topic} in ${language}. Each question must include: topic, question, options, answer (index of correct option), and a solution.`;
 
     const messages = [
         ["system", system_message],
-        ["human", "Generate a JSON array of questions add 5 questions of each subject. Each question should have the following properties: `topic`, `question`, `options`, `answer`, and `solution`. Ensure the options are multiple choice. Answer should be index from options."]
-    ]
+        ["human", "Generate a JSON array of questions."]
+    ];
 
     try {
         const response = await llm.invoke(messages);
@@ -16,4 +16,4 @@ async function generateQuestion(difficulty , subject , topic) {
     }
 }
 
-export default generateQuestion
+export default generateQuestion;
