@@ -14,7 +14,7 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Acceptance of Terms</h2>
           <p>
-            By accessing or using the Educhain platform, services, and website (collectively, the "Services"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you should not access or use the Services. The Services are offered by Educhain ("we", "our", or "us").
+            By accessing or using the EduAI platform, services, and website (collectively, the "Services"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you should not access or use the Services. The Services are offered by EduAI ("we", "our", or "us").
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Changes to Terms</h2>
@@ -29,7 +29,7 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">4. Service Description</h2>
           <p>
-            Educhain is an AI-powered platform designed to help educators create high-quality educational materials. The Services include, but are not limited to, generating multiple-choice questions, lesson plans, and educational content in various languages.
+            EduAI is an AI-powered platform designed to help educators create high-quality educational materials. The Services include, but are not limited to, generating multiple-choice questions, lesson plans, and educational content in various languages.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">5. Subscription and Payment</h2>
@@ -72,7 +72,7 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">9. Intellectual Property Rights</h2>
           <p>
-            The Services and their original content, features, and functionality are owned by Educhain and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
+            The Services and their original content, features, and functionality are owned by EduAI and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">10. Termination</h2>
@@ -87,7 +87,7 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">12. Limitation of Liability</h2>
           <p>
-            TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL EDUCHAIN, ITS AFFILIATES, OR THEIR RESPECTIVE OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR ACCESS TO OR USE OF OR INABILITY TO ACCESS OR USE THE SERVICES.
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL EduAI, ITS AFFILIATES, OR THEIR RESPECTIVE OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR ACCESS TO OR USE OF OR INABILITY TO ACCESS OR USE THE SERVICES.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">13. Governing Law</h2>

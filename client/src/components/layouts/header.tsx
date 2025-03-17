@@ -11,7 +11,7 @@ export default function Header() {
         <Link href="/" className="flex items-center">
           <Image
             src="https://web-assets.same.dev/481764797/1156539719.png"
-            alt="Educhain Logo"
+            alt="EduAI Logo"
             width={120}
             height={32}
             className="h-auto"
@@ -19,7 +19,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
-          <div className="relative group">
+          {/* <div className="relative group">
             <Button variant="ghost" className="flex items-center gap-1">
               For Teachers
               <svg
@@ -37,7 +37,7 @@ export default function Header() {
                 <path d="m6 9 6 6 6-6"/>
               </svg>
             </Button>
-          </div>
+          </div> */}
 
           <Link href="/about-us" className="text-sm font-medium hover:text-orange-500 transition-colors">
             About Us

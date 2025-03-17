@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Educhain - Reimagine Education with AI",
+  title: "EduAI - Reimagine Education with AI",
   description: "Generate a wide range of educational materials tailored to your specific needs and requirements, all with just a few clicks.",
 };
 

@@ -10,12 +10,12 @@ export default function AboutUsPage() {
       <Header/>
       <section className="py-12 md:py-20 bg-gray-50">
         <div className="container px-4 max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">About Educhain</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">About EduAI</h1>
           <p className="text-xl text-gray-600 mb-10">Revolutionizing Education with AI</p>
 
           <div className="max-w-3xl mx-auto">
             <p className="text-gray-700 mb-8">
-              At Educhain, we're on a mission to transform the teaching experience through the power of artificial intelligence.
+              At EduAI, we're on a mission to transform the teaching experience through the power of artificial intelligence.
               Founded in 2024, our platform empowers educators worldwide to create high-quality, personalized learning materials
               with unprecedented ease and efficiency.
             </p>
@@ -48,12 +48,12 @@ export default function AboutUsPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-lg mb-6">
-                <strong>Educhain was born from a simple yet powerful idea:</strong> What if we could harness
+                <strong>EduAI was born from a simple yet powerful idea:</strong> What if we could harness
                 the potential of AI to free up teachers' time, allowing them to focus on what truly matters -
                 inspiring and guiding their students?
               </p>
               <p className="text-gray-700 mb-6">
-                After months of rigorous development and testing with educators across the globe, Educhain was launched,
+                After months of rigorous development and testing with educators across the globe, EduAI was launched,
                 quickly becoming an indispensable tool for teachers worldwide.
               </p>
             </div>
@@ -95,13 +95,13 @@ export default function AboutUsPage() {
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
               <h3 className="text-xl font-bold mb-4">Teacher-Centric Design</h3>
               <p className="text-gray-700">
-                Every feature of Educhain is designed with teachers in mind, ensuring an intuitive and efficient user experience.
+                Every feature of EduAI is designed with teachers in mind, ensuring an intuitive and efficient user experience.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
               <h3 className="text-xl font-bold mb-4">Customization & Flexibility</h3>
               <p className="text-gray-700">
-                Educhain offers unparalleled customization options, allowing teachers to maintain their personal
+                EduAI offers unparalleled customization options, allowing teachers to maintain their personal
                 teaching style while leveraging AI.
               </p>
             </div>
