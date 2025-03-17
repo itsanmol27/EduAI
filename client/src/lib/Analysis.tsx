@@ -1,4 +1,3 @@
-"use client"
 import React from "react";
 
 interface TopicPerformance {
@@ -15,18 +14,23 @@ interface Question {
   solution: string;
 }
 
-interface TestData {
+export interface TestData {
   _id: string;
   total: number;
   score: number;
   topicsPerformance: Record<string, TopicPerformance>;
-  summeryByAi: string;
+  summeryByAi: {
+    Performance_Analysis: string;
+    Strengths: string;
+    Weaknesses: string;
+    Targeted_areas_for_improvement: string;
+  }
   questions: Question[];
   answers: number[];
 }
 
-export default function Analysis(testData: TestData) {
-  
+export default function Analysis({testData}: {testData: TestData}) {
+
   if (!testData) {
     return (
       <div className="container mx-auto p-4 text-center">
@@ -35,40 +39,6 @@ export default function Analysis(testData: TestData) {
       </div>
     );
   }
-
-  // Extract AI-generated summary data
-  const extractSummaryData = (summaryString: string) => {
-    try {
-      if (!summaryString || summaryString.trim() === "") {
-        return {
-          performanceAnalysis: "AI summary not available.",
-          strengths: "No strengths identified.",
-          weaknesses: "No weaknesses found.",
-          improvementAreas: "No recommendations provided.",
-        };
-      }
-
-      const parsedData = JSON.parse(summaryString);
-      const summary = Array.isArray(parsedData) && parsedData.length > 0 ? parsedData[0] : {};
-      console.log("Summary Data:", parsedData);
-      return {
-        performanceAnalysis: summary["Performance Analysis"] || "Not provided.",
-        strengths: summary["Strengths"] || "Not provided.",
-        weaknesses: summary["Weaknesses"] || "Not provided.",
-        improvementAreas: summary["Targeted Areas for Improvement"] || "Not provided.",
-      };
-    } catch (error) {
-      console.error("Error parsing AI summary:", error);
-      return {
-        performanceAnalysis: "Error extracting data.",
-        strengths: "Error extracting data.",
-        weaknesses: "Error extracting data.",
-        improvementAreas: "Error extracting data.",
-      };
-    }
-  };
-
-  const { performanceAnalysis, strengths, weaknesses, improvementAreas } = extractSummaryData(testData.summeryByAi);
 
   return (
     <div className="container mx-auto p-6">
@@ -99,18 +69,17 @@ export default function Analysis(testData: TestData) {
 
       {/* AI Analysis Section */}
       <div className="mt-6">
-        {JSON.stringify(testData.summeryByAi)}
         <h3 className="text-xl font-semibold">AI Performance Analysis</h3>
-        <p className="bg-yellow-50 p-3 border-l-4 border-yellow-500">{performanceAnalysis}</p>
+        <p className="bg-yellow-50 p-3 border-l-4 border-yellow-500">{testData.summeryByAi.Performance_Analysis}</p>
 
         <h4 className="text-lg font-semibold text-green-700 mt-4">Strengths</h4>
-        <p className="bg-green-50 p-3 border-l-4 border-green-500">{strengths}</p>
+        <p className="bg-green-50 p-3 border-l-4 border-green-500">{testData.summeryByAi.Strengths}</p>
 
         <h4 className="text-lg font-semibold text-red-700 mt-4">Weaknesses</h4>
-        <p className="bg-red-50 p-3 border-l-4 border-red-500">{weaknesses}</p>
+        <p className="bg-red-50 p-3 border-l-4 border-red-500">{testData.summeryByAi.Weaknesses}</p>
 
         <h4 className="text-lg font-semibold text-blue-700 mt-4">Areas for Improvement</h4>
-        <p className="bg-blue-50 p-3 border-l-4 border-blue-500">{improvementAreas}</p>
+        <p className="bg-blue-50 p-3 border-l-4 border-blue-500">{testData.summeryByAi.Targeted_areas_for_improvement}</p>
       </div>
 
       {/* Question Review Section */}

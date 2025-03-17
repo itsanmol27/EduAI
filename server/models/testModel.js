@@ -13,6 +13,13 @@ const summarySchema = new mongoose.Schema({
   total: { type: Number, required: true }
 } , {id:false});
 
+const AiSchema = new mongoose.Schema({
+  Targeted_areas_for_improvement: { type: String},
+  Strengths: { type: String },
+  Weaknesses: { type: String },
+  Performance_Analysis: { type: String }
+} , {id:false});
+
 const testSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   questions: [testQuestionSchema],
@@ -23,7 +30,7 @@ const testSchema = new mongoose.Schema({
     type: Map,
     of: summarySchema, 
   },
-  summeryByAi: { type: String }
+  summeryByAi: { type: AiSchema }
 });
 
 const Test = mongoose.model('Test', testSchema);

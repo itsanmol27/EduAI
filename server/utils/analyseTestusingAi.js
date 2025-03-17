@@ -14,8 +14,8 @@ async function analyseTestusingAi(test) {
                     ${JSON.stringify(test.topicsPerformance)}
                     Please generate a performance analysis with specific remarks on strengths, weaknesses,
                     and targeted areas for improvement. Make the feedback concise, with a focus on the most
-                    important points. Generate a JSON array of the analysis that will include Performance Analysis ,strengths, weaknesses,
-                    and targeted areas for improvement`,
+                    important points. Generate a JSON of the analysis that will include Performance_Analysis ,Strengths, Weaknesses,
+                    and targeted_areas_for_improvement in string format.`,
     ],
   ];
 
@@ -27,7 +27,7 @@ async function analyseTestusingAi(test) {
     .replace(/```json/g, "")
     .replace(/```/g, "");
     
-    test.summeryByAi = JSON.stringify(summaryContent);
+    test.summeryByAi = JSON.parse(summaryContent);
     console.log(summaryContent);
 
     await test.save();

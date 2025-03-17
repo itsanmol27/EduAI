@@ -11,6 +11,7 @@ import Footer from "@/components/layouts/footer";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { generateQuestionsRoute, submitQuestionsRoute } from "@/lib/routeProvider";
+import Analysis, { TestData } from "@/lib/Analysis";
 
 interface QuestionType {
   topic: string;
@@ -127,6 +128,8 @@ export default function DashboardPage() {
   const [answers, setAnswers] = useState<number[]>([]);
   const [testId, setTestId] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isResult , setIsResult] = useState<boolean>(false);
+  const [result , setResult] = useState<TestData>();
 
   const router = useRouter();
   async function handleGenerateQuestions() {
@@ -159,10 +162,12 @@ export default function DashboardPage() {
       setTestId([]);
     }
     setIsLoading(false);
-    const testData = JSON.stringify(respone.data.test);
-    const encodedData = encodeURIComponent(testData);
-    router.push(`/analysis?data=${encodedData}`);
-    console.log("Encoded Data" , encodedData);
+    setIsResult(true);
+    setResult(respone.data.test);
+  }
+
+  if(isResult && result){
+    return <Analysis testData={result} />
   }
 
   return (
