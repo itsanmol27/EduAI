@@ -14,17 +14,17 @@ export default function RefundPolicyPage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Overview</h2>
           <p>
-            This Refund Policy outlines the terms and conditions regarding refunds for subscription fees paid to Educhain. By using our services, you agree to the terms of this Refund Policy.
+            This Refund Policy outlines the terms and conditions regarding refunds for subscription fees paid to EduAI. By using our services, you agree to the terms of this Refund Policy.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Subscription Plans</h2>
           <p>
-            Educhain offers both free and paid subscription plans. Paid subscriptions may be offered on a monthly, quarterly, or annual basis, as described on our website or during the checkout process.
+            EduAI offers both free and paid subscription plans. Paid subscriptions may be offered on a monthly, quarterly, or annual basis, as described on our website or during the checkout process.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">3. General Refund Policy</h2>
           <p>
-            As a general rule, subscription fees for Educhain services are non-refundable. We do not provide refunds for:
+            As a general rule, subscription fees for EduAI services are non-refundable. We do not provide refunds for:
           </p>
           <ul className="list-disc pl-6 mb-4">
             <li>Partial use of services during a billing period</li>

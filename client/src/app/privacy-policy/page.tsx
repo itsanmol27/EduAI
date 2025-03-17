@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">Introduction</h2>
           <p>
-            Educhain ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our mobile application, or interact with our services.
+            EduAI ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our mobile application, or interact with our services.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">Information We Collect</h2>

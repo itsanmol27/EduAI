@@ -14,15 +14,48 @@ import {
 import { Label } from "@/components/ui/label";
 import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
+import { useState } from "react";
+import axios from "axios";
+import { signInRoute } from "@/lib/routeProvider";
 
 export default function SignInPage() {
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
+
+  const changeHandler = (e: any) => {
+    setCredentials((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const submitHandler = async (e: any) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("email", credentials.email);
+    formData.append("password", credentials.password);
+
+    try {
+      const response = await axios.post(`${signInRoute}`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
       <Header />
       <div className="container flex h-screen items-center justify-center py-20">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Sign in to Educhain</CardTitle>
+            <CardTitle className="text-2xl font-bold">Sign in to EduAI</CardTitle>
             <CardDescription>
               Enter your email and password to access your account
             </CardDescription>
@@ -33,6 +66,9 @@ export default function SignInPage() {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
+                  value={credentials.email}
+                  onChange={changeHandler}
                   placeholder="name@example.com"
                   type="email"
                   required
@@ -50,6 +86,9 @@ export default function SignInPage() {
                 </div>
                 <Input
                   id="password"
+                  name="password"
+                  value={credentials.password}
+                  onChange={changeHandler}
                   placeholder="Enter your password"
                   type="password"
                   required
@@ -58,6 +97,7 @@ export default function SignInPage() {
               <Button
                 type="submit"
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                onClick={submitHandler}
               >
                 Sign In
               </Button>
@@ -73,22 +113,33 @@ export default function SignInPage() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline">
+            <Button variant="outline">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
+                  width="30"
+                  height="30"
+                  viewBox="0 0 48 48"
                   fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
                   className="mr-2 h-4 w-4"
                 >
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  <path
+                    fill="#4285F4"
+                    d="M24 22v4h10a8 8 0 01-3.39 5.79l5.26 4.07A15.94 15.94 0 0040 24c0-.67-.07-1.33-.17-2H24z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M13.5 28.73a8 8 0 01-3.5-4.73L4.74 28A15.94 15.94 0 0024 40c4.22 0 7.74-1.41 10.87-3.79l-5.26-4.07A10 10 0 0113.5 28.73z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M6.41 19.27A15.94 15.94 0 004 24c0 1.67.24 3.28.74 4.73l5.26-4.07a10 10 0 010-5.32l-5.26-4.07z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M24 8a15.94 15.94 0 00-13.5 7.27l5.26 4.07A10 10 0 0124 14c2.48 0 4.73.87 6.5 2.29l5.26-4.07A15.94 15.94 0 0024 8z"
+                  />
                 </svg>
-                Facebook
+                Google
               </Button>
               <Button variant="outline">
                 <svg

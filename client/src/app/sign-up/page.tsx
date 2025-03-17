@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,41 +13,70 @@ import {
 import { Label } from "@/components/ui/label";
 import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
+import { useState } from "react";
+import axios from "axios";
+import { signUpRoute } from "@/lib/routeProvider";
 
 export default function SignUpPage() {
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+    checked: false,
+  });
+
+  const changeHandler = (e: any) => {
+    setCredentials((prev) => ({
+      ...prev,
+      [e.target.name]:
+        e.target.type === "checkbox" ? e.target.checked : e.target.value,
+    }));
+  };
+
+  const submitHandler = async (e: any) => {
+    e.preventDefault();
+
+    if (!credentials.checked) {
+      alert("Please agree to the Terms and Conditions");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("email", credentials.email);
+    formData.append("password", credentials.password);
+
+    try {
+      const response = await axios.post(`${signUpRoute}`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
       <Header />
       <div className="container flex h-screen items-center justify-center py-20">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Create an account
+            </CardTitle>
             <CardDescription>
-              Enter your information to create an Educhain account
+              Enter your information to create an EduAI account
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First name</Label>
-                  <Input
-                    id="firstName"
-                    placeholder="John"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last name</Label>
-                  <Input
-                    id="lastName"
-                    placeholder="Doe"
-                  />
-                </div>
-              </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
+                  value={credentials.email}
+                  onChange={changeHandler}
                   placeholder="name@example.com"
                   type="email"
                   required
@@ -58,27 +86,39 @@ export default function SignUpPage() {
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
+                  name="password"
+                  value={credentials.password}
+                  onChange={changeHandler}
                   placeholder="Create a password"
                   type="password"
                   required
                 />
                 <p className="text-xs text-gray-500">
-                  Password must be at least 8 characters long and include letters and numbers
+                  Password must be at least 8 characters long and include
+                  letters and numbers
                 </p>
               </div>
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   id="terms"
+                  checked={credentials.checked}
+                  onChange={changeHandler}
                   className="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
                 />
                 <Label htmlFor="terms" className="text-sm text-gray-500">
                   I agree to the{" "}
-                  <Link href="/terms-of-service" className="text-orange-500 hover:underline">
+                  <Link
+                    href="/terms-of-service"
+                    className="text-orange-500 hover:underline"
+                  >
                     Terms of Service
                   </Link>{" "}
                   and{" "}
-                  <Link href="/privacy-policy" className="text-orange-500 hover:underline">
+                  <Link
+                    href="/privacy-policy"
+                    className="text-orange-500 hover:underline"
+                  >
                     Privacy Policy
                   </Link>
                 </Label>
@@ -86,6 +126,7 @@ export default function SignUpPage() {
               <Button
                 type="submit"
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                onClick={submitHandler}
               >
                 Create Account
               </Button>
@@ -97,26 +138,39 @@ export default function SignUpPage() {
                 <span className="w-full border-t border-gray-300"></span>
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                <span className="bg-white px-2 text-gray-500">
+                  Or continue with
+                </span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Button variant="outline">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
+                  width="30"
+                  height="30"
+                  viewBox="0 0 48 48"
                   fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
                   className="mr-2 h-4 w-4"
                 >
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  <path
+                    fill="#4285F4"
+                    d="M24 22v4h10a8 8 0 01-3.39 5.79l5.26 4.07A15.94 15.94 0 0040 24c0-.67-.07-1.33-.17-2H24z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M13.5 28.73a8 8 0 01-3.5-4.73L4.74 28A15.94 15.94 0 0024 40c4.22 0 7.74-1.41 10.87-3.79l-5.26-4.07A10 10 0 0113.5 28.73z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M6.41 19.27A15.94 15.94 0 004 24c0 1.67.24 3.28.74 4.73l5.26-4.07a10 10 0 010-5.32l-5.26-4.07z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M24 8a15.94 15.94 0 00-13.5 7.27l5.26 4.07A10 10 0 0124 14c2.48 0 4.73.87 6.5 2.29l5.26-4.07A15.94 15.94 0 0024 8z"
+                  />
                 </svg>
-                Facebook
+                Google
               </Button>
               <Button variant="outline">
                 <svg

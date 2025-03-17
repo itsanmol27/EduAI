@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header";
 
 interface FeatureProps {
   icon: React.ReactNode;
@@ -23,7 +23,7 @@ function Feature({
 }: FeatureProps) {
   return (
     <>
-    <Header/>
+    {/* <Header/> */}
     <div className="mb-24">
       <div className={`rounded-lg p-8 ${bgColor} relative overflow-hidden`}>
         <div className="flex items-center mb-4">
@@ -65,7 +65,7 @@ function Feature({
         </div>
       </div>
     </div>
-    <Footer/>
+    {/* <Footer/> */}
     </>
   );
 }
@@ -73,6 +73,7 @@ function Feature({
 export default function FeaturesPage() {
   return (
     <div>
+      <Header/>
       <section className="py-12 md:py-20 bg-gray-50">
         <div className="container px-4 max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center bg-blue-100 text-blue-600 rounded-full px-4 py-1 mb-6">
@@ -207,6 +208,7 @@ export default function FeaturesPage() {
           />
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }

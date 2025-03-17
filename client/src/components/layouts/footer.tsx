@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="px-8 py-20 relative">
         <div className="max-w-7xl mx-auto text-sm text-neutral-700 dark:text-neutral-400 flex sm:flex-row flex-col justify-between items-start">
           <div>
-            <div>Copyright © 2024 Educhain</div>
+            <div>Copyright © 2024 EduAI</div>
             <div className="mt-2">
               by{" "}
               <a
@@ -67,15 +67,15 @@ export default function Footer() {
       </div>
 
       <p className="text-center text-5xl md:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-orange-500/10 to-orange-500/20 inset-x-0">
-        EDUCHAIN
+        EduAI
       </p>
 
       <div className="border border-t border-gray-100 text-center flex flex-col items-center space-y-1 text-gray-500 py-4">
-        <p className="mb-3">Educhain is built on top of Open Source package educhain</p>
+        <p className="mb-3">EduAI is built on top of Open Source package EduAI</p>
         <a
           target="_blank"
           className="flex space-x-3 hover:underline underline-offset-4"
-          href="https://github.com/satvik314/educhain"
+          href="https://github.com/satvik314/EduAI"
           rel="noopener noreferrer"
         >
           <svg

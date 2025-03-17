@@ -8,16 +8,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
-import axios from "axios"
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { generateQuestionsRoute, submitQuestionsRoute } from "@/lib/routeProvider";
 
 interface QuestionType {
-  topic: String;
-  question: String;
-  options: String[];
-  answer: Number;
-  solution: String;
-  _id: String;
+  topic: string;
+  question: string;
+  options: string[];
+  answer: number;
+  solution: string;
+  _id: string;
 }
 
 const tools = [
@@ -119,14 +120,15 @@ const tools = [
 
 export default function DashboardPage() {
   const [selectedTool, setSelectedTool] = useState("mcq-generator");
-  const [subjects, setSubjects] = useState<String[]>([]);
-  const [topics, setTopics] = useState<String[]>([]);
-  const [difficulty, setDifficulty] = useState<String>("medium");
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [topics, setTopics] = useState<string[]>([]);
+  const [difficulty, setDifficulty] = useState<string>("medium");
   const [questions, setQuestions] = useState<QuestionType[]>([]);
-  const [answers , setAnswers] = useState<Number[]>([]);
-  const [testId , setTestId] = useState<Number[]>([]);
-  const [isLoading , setIsLoading] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<number[]>([]);
+  const [testId, setTestId] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const router = useRouter();
   async function handleGenerateQuestions() {
     setIsLoading(true);
     const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty });
@@ -134,12 +136,12 @@ export default function DashboardPage() {
     if (response.data.status) {
       setQuestions(response.data.test.questions);
       setTestId(response.data.test._id);
-      setAnswers(Array.from({length: response.data.test.questions.length}, () => -1));
+      setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
     }
     setIsLoading(false);
   }
 
-  function handleSelectOption(questionindex:number, ansindex:number){
+  function handleSelectOption(questionindex: number, ansindex: number) {
     const newAnswers = [...answers];
     newAnswers[questionindex] = ansindex;
     setAnswers(newAnswers);
@@ -148,15 +150,19 @@ export default function DashboardPage() {
 
   async function handleSubmit() {
     setIsLoading(true);
-    
-    const respone = await axios.post(submitQuestionsRoute , {testId ,answers})
-    if(respone.data.status){
+
+    const respone = await axios.post(submitQuestionsRoute, { testId, answers })
+    if (respone.data.status) {
       alert("Test Submitted Successfully");
       setQuestions([]);
       setAnswers([]);
       setTestId([]);
     }
     setIsLoading(false);
+    const testData = JSON.stringify(respone.data.test);
+    const encodedData = encodeURIComponent(testData);
+    router.push(`/analysis?data=${encodedData}`);
+    console.log("Encoded Data" , encodedData);
   }
 
   return (
@@ -166,7 +172,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-3xl font-bold">Dashboard</h1>
-            <p className="text-gray-600">Welcome back, Teacher</p>
+            <p className="text-gray-600">Welcome back, Student</p>
           </div>
           <div className="flex items-center space-x-4">
             <Button variant="outline">Upgrade to Pro</Button>
@@ -175,8 +181,8 @@ export default function DashboardPage() {
                 T
               </div>
               <div className="hidden md:block">
-                <div className="text-sm font-semibold">Teacher Account</div>
-                <div className="text-xs text-gray-500">teacher@example.com</div>
+                <div className="text-sm font-semibold">Student Account</div>
+                <div className="text-xs text-gray-500">Student@example.com</div>
               </div>
             </div>
           </div>
@@ -271,21 +277,21 @@ export default function DashboardPage() {
                       </Tabs>
                       :
                       <div className=" flex flex-col gap-4">
-                        {questions.map((question , questionIndex) => (
+                        {questions.map((question, questionIndex) => (
                           <div key={questionIndex}>
                             <div className=" font-semibold"><span className=" font-medium">{questionIndex + 1}.</span> {question.question}</div>
                             <div className=" flex flex-wrap">
-                              {question.options.map((option , ansindex)=>(
-                                <button disabled={isLoading} onClick={()=>{handleSelectOption(questionIndex , ansindex)}} className={` text-left font-medium text-sm w-[48%] bg-gray-100 m-1 py-2 px-4 rounded-md hover:bg-blue-500 hover:text-white disabled:cursor-not-allowed ${answers[questionIndex] === ansindex ? " bg-blue-600 text-white" : ""}`} key={ansindex}><span>{ansindex + 1}. </span>{option}</button>
+                              {question.options.map((option, ansindex) => (
+                                <button disabled={isLoading} onClick={() => { handleSelectOption(questionIndex, ansindex) }} className={` text-left font-medium text-sm w-[48%] bg-gray-100 text-black m-1 py-2 px-4 rounded-md hover:bg-blue-500 hover:text-white disabled:cursor-not-allowed ${answers[questionIndex] === ansindex ? " bg-blue-300 text-white" : ""}`} key={ansindex}><span>{ansindex + 1}. </span>{option}</button>
                               ))}
                             </div>
                           </div>
                         ))}
                         <div className="flex justify-end">
-                            <Button disabled={isLoading} onClick={handleSubmit} className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed">
-                              Submit
-                            </Button>
-                          </div>
+                          <Button disabled={isLoading} onClick={handleSubmit} className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed">
+                            Submit
+                          </Button>
+                        </div>
                       </div>
                   }
                 </CardContent>
