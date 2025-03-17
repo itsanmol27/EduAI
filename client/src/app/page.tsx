@@ -26,7 +26,7 @@ export default function HomePage() {
               Teaching Made Easy
             </h2>
             <p className="text-gray-600 mb-8">
-              Generate educational content easily with Educhain
+              Generate educational content easily with EduAI
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/dashboard">
@@ -45,7 +45,7 @@ export default function HomePage() {
           <div className="relative mt-10 mb-16 mx-auto max-w-4xl">
             <Image
               src="https://web-assets.same.dev/2177753787/849522504.png"
-              alt="Educhain Platform"
+              alt="EduAI Platform"
               width={800}
               height={500}
               className="w-full h-auto rounded-lg shadow-lg"
@@ -75,7 +75,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Meet Educhain Section */}
+      {/* Meet EduAI Section */}
       <section className="py-12 md:py-20 bg-gray-50">
         <div className="container px-4 max-w-7xl mx-auto">
           <div className="bg-orange-500 text-white rounded-lg p-6 inline-block mb-6">
@@ -83,10 +83,10 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-4">Meet Educhain.</h2>
+              <h2 className="text-3xl font-bold mb-4">Meet EduAI.</h2>
               <h3 className="text-2xl font-bold mb-6">Reimagine Education with AI</h3>
               <p className="text-gray-600 mb-8">
-                Generate a wide range of educational materials tailored to your specific needs and requirements, all with just a few clicks. From MCQs to comprehensive lesson plans, Educhain is here to revolutionize your teaching experience.
+                Generate a wide range of educational materials tailored to your specific needs and requirements, all with just a few clicks. From MCQs to comprehensive lesson plans, EduAI is here to revolutionize your teaching experience.
               </p>
               <Link href="/dashboard">
                 <Button className="bg-orange-500 hover:bg-orange-600 text-white">
@@ -119,7 +119,7 @@ export default function HomePage() {
                   T
                 </div>
                 <div>
-                  <div className="font-bold">Teacher</div>
+                  <div className="font-bold">Student</div>
                   <div className="text-sm text-gray-600">
                     Generate MCQs for <span className="font-bold">PHYSICS</span> with focus on <span className="font-bold">MECHANICS</span>
                   </div>
@@ -130,7 +130,7 @@ export default function HomePage() {
                   E
                 </div>
                 <div>
-                  <div className="font-bold">Educhain AI</div>
+                  <div className="font-bold">EduAI AI</div>
                   <div className="text-sm text-gray-600">
                     Generating a set of physics MCQs focusing on mechanics now.
                   </div>
@@ -177,7 +177,7 @@ export default function HomePage() {
             Trusted by Educators Worldwide
           </h2>
           <p className="text-center text-gray-600 mb-12">
-            Educhain is used by hundreds of educators around the globe.
+            EduAI is used by hundreds of educators around the globe.
           </p>
           <TestimonialSection />
         </div>
@@ -190,7 +190,7 @@ export default function HomePage() {
             Frequently Asked Questions
           </h2>
           <p className="text-center text-gray-600 mb-12">
-            Find answers to common questions about Educhain
+            Find answers to common questions about EduAI
           </p>
           <FaqSection />
         </div>
