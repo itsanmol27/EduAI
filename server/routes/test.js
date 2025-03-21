@@ -31,10 +31,10 @@ router.post("/generate" , async (req,res) => {
     }
 })
 
-router.post("/generate/context" , async (req,res) => {
-    const {context, difficulty} = req.body;
+router.post("/generate/content" , async (req,res) => {
+    const {content, difficulty} = req.body;
 
-    const question = await generateQuestionwithContext(difficulty , context);
+    const question = await generateQuestionwithContext(difficulty , content);
 
     let questionContent = question.content;
 

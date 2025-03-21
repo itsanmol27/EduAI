@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +10,7 @@ import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { generateQuestionsRoute, submitQuestionsRoute } from "@/lib/routeProvider";
+import { generateQuestionsRoute, submitQuestionsRoute , generateQuestionsWithContentRoute } from "@/lib/routeProvider";
 import Analysis, { TestData } from "@/lib/Analysis";
 
 interface QuestionType {
@@ -130,11 +130,24 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isResult , setIsResult] = useState<boolean>(false);
   const [result , setResult] = useState<TestData>();
+  const [content , setContent] = useState<string>('');
 
   const router = useRouter();
   async function handleGenerateQuestions() {
     setIsLoading(true);
     const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty });
+
+    if (response.data.status) {
+      setQuestions(response.data.test.questions);
+      setTestId(response.data.test._id);
+      setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
+    }
+    setIsLoading(false);
+  }
+
+  async function handleGenerateQuestionswithContent() {
+    setIsLoading(true);
+    const response = await axios.post(generateQuestionsWithContentRoute, { content, difficulty });
 
     if (response.data.status) {
       setQuestions(response.data.test.questions);
@@ -256,6 +269,7 @@ export default function DashboardPage() {
                             <Textarea
                               placeholder="Paste text or enter content from which to generate questions..."
                               className="min-h-[200px]"
+                              onChange={(e)=>{setContent(e.target.value)}}
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -274,7 +288,7 @@ export default function DashboardPage() {
                             </div>
                           </div>
                           <div className="flex justify-end">
-                            <Button disabled={isLoading} className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed">
+                            <Button disabled={isLoading} onClick={handleGenerateQuestionswithContent} className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed">
                               Generate Questions
                             </Button>
                           </div>
@@ -287,7 +301,7 @@ export default function DashboardPage() {
                             <div className=" font-semibold"><span className=" font-medium">{questionIndex + 1}.</span> {question.question}</div>
                             <div className=" flex flex-wrap">
                               {question.options.map((option, ansindex) => (
-                                <button disabled={isLoading} onClick={() => { handleSelectOption(questionIndex, ansindex) }} className={` text-left font-medium text-sm w-[48%] bg-gray-100 text-black m-1 py-2 px-4 rounded-md hover:bg-blue-500 hover:text-white disabled:cursor-not-allowed ${answers[questionIndex] === ansindex ? " bg-blue-300 text-white" : ""}`} key={ansindex}><span>{ansindex + 1}. </span>{option}</button>
+                                <button disabled={isLoading} onClick={() => { handleSelectOption(questionIndex, ansindex) }} className={` text-left font-medium text-sm w-[48%] bg-gray-100 text-black m-1 py-2 px-4 rounded-md hover:bg-orange-500 hover:text-white disabled:cursor-not-allowed ${answers[questionIndex] === ansindex ? " bg-orange-500 text-white" : ""}`} key={ansindex}><span>{ansindex + 1}. </span>{option}</button>
                               ))}
                             </div>
                           </div>

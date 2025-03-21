@@ -1,7 +1,7 @@
 import llm from "./llmProvider.js";
 
-async function generateQuestionwithContext(difficulty , context) {
-    const system_message = `You are an expert professor who generates ${difficulty} level questions in from the given context on ${context}. Generate an appropriate question along with the correct answer.`
+async function generateQuestionwithContext(difficulty , content) {
+    const system_message = `You are an expert professor who generates ${difficulty} level questions in from the given content on ${content}. Generate an appropriate question along with the correct answer.`
 
     const messages = [
         ["system", system_message],
