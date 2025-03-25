@@ -16,44 +16,36 @@ import Footer from "@/components/layouts/footer";
 import { useState } from "react";
 import axios from "axios";
 import { signUpRoute } from "@/lib/routeProvider";
+import { GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup } from "firebase/auth";
+import app from "@/lib/Firebase";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-    checked: false,
-  });
 
-  const changeHandler = (e: any) => {
-    setCredentials((prev) => ({
-      ...prev,
-      [e.target.name]:
-        e.target.type === "checkbox" ? e.target.checked : e.target.value,
-    }));
-  };
+  const [name , setName] = useState("");
+  const [password , setPassword] = useState("");
+  const [email , setEmail] = useState("");
 
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
+  const provider = new GoogleAuthProvider();
+  const auth = getAuth(app);
+  const router = useRouter();
 
-    if (!credentials.checked) {
-      alert("Please agree to the Terms and Conditions");
-      return;
+  async function submitHandler() {
+    const response = await axios.post(signUpRoute, {name , password , email});
+    console.log(response.data);
+  }
+
+  async function submitWithGoogle() {
+    const result = await signInWithPopup(auth , provider)
+      
+    const response = await axios.post(signUpRoute , {name:result.user.displayName , email:result.user.email , profilePhoto:result.user.photoURL , authProvider:"GOOGLE"});
+    console.log(response.data);
+    if(response.data.status){
+      localStorage.setItem("user" , JSON.stringify(response.data.user));
+      router.push("/dashboard");
     }
-    const formData = new FormData();
-    formData.append("email", credentials.email);
-    formData.append("password", credentials.password);
-
-    try {
-      const response = await axios.post(`${signUpRoute}`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  }
 
   return (
     <div>
@@ -71,12 +63,22 @@ export default function SignUpPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="space-y-2">
+                <Label htmlFor="email">Name</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  onChange={(e)=>{setName(e.target.value)}}
+                  placeholder="name@example.com"
+                  type="text"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   name="email"
-                  value={credentials.email}
-                  onChange={changeHandler}
+                  onChange={(e)=>{setEmail(e.target.value)}}
                   placeholder="name@example.com"
                   type="email"
                   required
@@ -87,8 +89,7 @@ export default function SignUpPage() {
                 <Input
                   id="password"
                   name="password"
-                  value={credentials.password}
-                  onChange={changeHandler}
+                  onChange={(e)=>{setPassword(e.target.value)}}
                   placeholder="Create a password"
                   type="password"
                   required
@@ -97,31 +98,6 @@ export default function SignUpPage() {
                   Password must be at least 8 characters long and include
                   letters and numbers
                 </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  checked={credentials.checked}
-                  onChange={changeHandler}
-                  className="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                />
-                <Label htmlFor="terms" className="text-sm text-gray-500">
-                  I agree to the{" "}
-                  <Link
-                    href="/terms-of-service"
-                    className="text-orange-500 hover:underline"
-                  >
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link
-                    href="/privacy-policy"
-                    className="text-orange-500 hover:underline"
-                  >
-                    Privacy Policy
-                  </Link>
-                </Label>
               </div>
               <Button
                 type="submit"
@@ -144,7 +120,7 @@ export default function SignUpPage() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline">
+              <Button variant="outline" onClick={submitWithGoogle}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="30"
