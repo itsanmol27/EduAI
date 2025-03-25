@@ -180,7 +180,7 @@ export default function DashboardPage() {
   }
 
   if(isResult && result){
-    return <Analysis testData={result} />
+    return <Analysis testData={result} setIsResult={setIsResult} />
   }
 
   return (
