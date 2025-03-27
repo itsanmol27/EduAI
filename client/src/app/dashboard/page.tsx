@@ -9,8 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { generateQuestionsRoute, submitQuestionsRoute , generateQuestionsWithContentRoute } from "@/lib/routeProvider";
+import { generateQuestionsRoute, submitQuestionsRoute, generateQuestionsWithContentRoute, solveDoubtRoute } from "@/lib/routeProvider";
 import Analysis, { TestData } from "@/lib/Analysis";
 
 interface QuestionType {
@@ -21,6 +20,15 @@ interface QuestionType {
   solution: string;
   _id: string;
 }
+
+export interface DoubtSolution {
+  userId: string;
+  imageUrl?: string;
+  imageText: string;
+  answer: string;
+  _id: string;
+}
+
 
 const tools = [
   {
@@ -128,14 +136,18 @@ export default function DashboardPage() {
   const [answers, setAnswers] = useState<number[]>([]);
   const [testId, setTestId] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isResult , setIsResult] = useState<boolean>(false);
-  const [result , setResult] = useState<TestData>();
-  const [content , setContent] = useState<string>('');
+  const [isResult, setIsResult] = useState<boolean>(false);
+  const [result, setResult] = useState<TestData>();
+  const [content, setContent] = useState<string>('');
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
+  const [doubtSolution, setDoubtSolution] = useState<DoubtSolution | null>(null);
+  const [language , setLanguage] = useState<string>('English');
 
-  const router = useRouter();
   async function handleGenerateQuestions() {
     setIsLoading(true);
-    const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty });
+    const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty , language });
 
     if (response.data.status) {
       setQuestions(response.data.test.questions);
@@ -179,7 +191,61 @@ export default function DashboardPage() {
     setResult(respone.data.test);
   }
 
-  if(isResult && result){
+  async function handleSolveDoubt() {
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('subject', 'Your subject value here');
+    formData.append('question', 'Your question value here');
+    formData.append('gradeLevel', 'Your grade level value here');
+
+    if (selectedImage) {
+      formData.append('image', selectedImage);
+    }
+
+    try {
+      const response = await axios.post(solveDoubtRoute, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.status) {
+        setDoubtSolution(response.data.doubt);
+        setIsSolutionModalOpen(true);
+      }
+
+    } catch (error) {
+      console.error('Error solving doubt:', error);
+      // You might want to show an error toast here
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function formatSolutionText(text: string) {
+    // Convert markdown-style bold (**text**) to HTML
+    let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Convert numbered lists - alternative approach without s flag
+    formattedText = formattedText.split('\n').map(line => {
+      // Match lines starting with number followed by dot
+      if (/^\d+\.\s/.test(line)) {
+        return `<li>${line.replace(/^\d+\.\s/, '')}</li>`;
+      }
+      return line;
+    }).join('\n');
+
+    // Add paragraph tags for double line breaks
+    formattedText = formattedText.replace(/\n\n/g, '</p><p>');
+
+    // Add line breaks for single line breaks
+    formattedText = formattedText.replace(/\n(?!\n)/g, '<br>');
+
+    return `<p>${formattedText}</p>`;
+  }
+
+  if (isResult && result) {
     return <Analysis testData={result} setIsResult={setIsResult} />
   }
 
@@ -269,7 +335,7 @@ export default function DashboardPage() {
                             <Textarea
                               placeholder="Paste text or enter content from which to generate questions..."
                               className="min-h-[200px]"
-                              onChange={(e)=>{setContent(e.target.value)}}
+                              onChange={(e) => { setContent(e.target.value) }}
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -375,7 +441,8 @@ export default function DashboardPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Language</label>
-                    <select className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
+                    <select onChange={(e)=>{ setLanguage(e.target.value)}} className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
+                      <option value="hindi">English</option>
                       <option value="hindi">Hindi</option>
                       <option value="marathi">Marathi</option>
                       <option value="gujarati">Gujarati</option>
@@ -390,7 +457,7 @@ export default function DashboardPage() {
                     <Textarea placeholder="Specific details about the content you want to generate..." />
                   </div>
                   <div className="flex justify-end">
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    <Button disabled={isLoading} onClick={handleGenerateQuestions} className="bg-orange-500 hover:bg-orange-600 text-white">
                       Generate Content
                     </Button>
                   </div>
@@ -422,13 +489,122 @@ export default function DashboardPage() {
                     <label className="text-sm font-medium">Grade/Age Level</label>
                     <Input placeholder="e.g. 10th Grade, 8-10 years" />
                   </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Upload Image (Optional)</label>
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        id="doubt-image"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            const file = e.target.files[0];
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                              setImagePreview(event.target?.result as string);
+                              setSelectedImage(file);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                      />
+                      <label
+                        htmlFor="doubt-image"
+                        className="px-4 py-2 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200"
+                      >
+                        Choose Image
+                      </label>
+                      {imagePreview && (
+                        <div className="relative">
+                          <img
+                            src={imagePreview}
+                            alt="Preview"
+                            className="h-20 w-20 object-cover rounded-md"
+                          />
+                          <button
+                            type="button"
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                            onClick={() => {
+                              setImagePreview(null);
+                              setSelectedImage(null);
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                   <div className="flex justify-end">
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    <Button
+                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                      onClick={handleSolveDoubt}
+                    >
                       Solve Doubt
                     </Button>
                   </div>
                 </CardContent>
               </Card>
+            )}
+
+            {isSolutionModalOpen && doubtSolution && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+                  <div className="flex justify-between items-center border-b p-4">
+                    <h3 className="text-xl font-bold">Doubt Solution</h3>
+                    <button
+                      onClick={() => setIsSolutionModalOpen(false)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="overflow-y-auto p-6 flex-1">
+                    {doubtSolution.imageUrl && (
+                      <div className="mb-6">
+                        <h4 className="font-semibold mb-2">Uploaded Image:</h4>
+                        <div className="flex flex-col md:flex-row gap-6">
+                          <div className="flex-1">
+                            <img
+                              src={doubtSolution.imageUrl}
+                              alt="Doubt image"
+                              className="max-h-60 w-auto rounded-md border"
+                            />
+                          </div>
+                          <div className="flex-1 bg-gray-50 p-4 rounded-md">
+                            <h4 className="font-semibold mb-2">Extracted Text:</h4>
+                            <div className="whitespace-pre-wrap text-sm">
+                              {doubtSolution.imageText}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="prose max-w-none">
+                      <h4 className="font-semibold mb-2">Solution:</h4>
+                      <div
+                        className="text-gray-700 whitespace-pre-wrap"
+                        dangerouslySetInnerHTML={{ __html: formatSolutionText(doubtSolution.answer) }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border-t p-4 flex justify-end">
+                    <Button
+                      onClick={() => setIsSolutionModalOpen(false)}
+                      className="bg-orange-500 hover:bg-orange-600"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
