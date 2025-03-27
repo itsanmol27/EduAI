@@ -11,6 +11,7 @@ import Footer from "@/components/layouts/footer";
 import axios from "axios";
 import { generateQuestionsRoute, submitQuestionsRoute, generateQuestionsWithContentRoute, solveDoubtRoute } from "@/lib/routeProvider";
 import Analysis, { TestData } from "@/lib/Analysis";
+import { LoadingSpinner, FullPageLoader } from "@/lib/loading";
 
 interface QuestionType {
   topic: string;
@@ -144,34 +145,49 @@ export default function DashboardPage() {
   const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
   const [doubtSolution, setDoubtSolution] = useState<DoubtSolution | null>(null);
   const [language, setLanguage] = useState<string>('English');
+  const [loadingText, setLoadingText] = useState<string | null>(null);
 
   async function handleGenerateQuestions() {
     setIsLoading(true);
-    const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty, language });
+    setLoadingText("Generating questions...");
 
-    if (response.data.status) {
-      setQuestions(response.data.test.questions);
-      setTestId(response.data.test._id);
-      setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
-      // Reset the form fields if needed
-      setSubjects([]);
-      setTopics([]);
+    try {
+      const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty, language });
+      if (response.data.status) {
+        setQuestions(response.data.test.questions);
+        setTestId(response.data.test._id);
+        setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
+        setSubjects([]);
+        setTopics([]);
+      }
+    } catch (error) {
+      console.error("Error generating questions:", error);
+
+    } finally {
+      setIsLoading(false);
+      setLoadingText(null);
     }
-    setIsLoading(false);
   }
+
 
   async function handleGenerateQuestionswithContent() {
     setIsLoading(true);
-    const response = await axios.post(generateQuestionsWithContentRoute, { content, difficulty });
-
-    if (response.data.status) {
-      setQuestions(response.data.test.questions);
-      setTestId(response.data.test._id);
-      setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
-      // Reset the content field if needed
-      setContent('');
+    setLoadingText("Generating questions from content...");
+    try {
+      const response = await axios.post(generateQuestionsWithContentRoute, { content, difficulty });
+      if (response.data.status) {
+        setQuestions(response.data.test.questions);
+        setTestId(response.data.test._id);
+        setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
+        setContent('');
+      }
+    } catch (error) {
+      console.error("Error generating questions:", error);
+      // You might want to show an error toast here
+    } finally {
+      setIsLoading(false);
+      setLoadingText(null);
     }
-    setIsLoading(false);
   }
 
   function handleSelectOption(questionindex: number, ansindex: number) {
@@ -183,32 +199,38 @@ export default function DashboardPage() {
 
   async function handleSubmit() {
     setIsLoading(true);
-
-    const respone = await axios.post(submitQuestionsRoute, { testId, answers })
-    if (respone.data.status) {
-      alert("Test Submitted Successfully");
-      setQuestions([]);
-      setAnswers([]);
-      setTestId([]);
+    setLoadingText("Submitting your test...");
+    try {
+      const response = await axios.post(submitQuestionsRoute, { testId, answers });
+      if (response.data.status) {
+        setQuestions([]);
+        setAnswers([]);
+        setTestId([]);
+        setIsResult(true);
+        setResult(response.data.test);
+      }
+    } catch (error) {
+      console.error("Error submitting test:", error);
+      // You might want to show an error toast here
+    } finally {
+      setIsLoading(false);
+      setLoadingText(null);
     }
-    setIsLoading(false);
-    setIsResult(true);
-    setResult(respone.data.test);
   }
 
   async function handleSolveDoubt() {
     setIsLoading(true);
-
-    const formData = new FormData();
-    formData.append('subject', 'Your subject value here');
-    formData.append('question', 'Your question value here');
-    formData.append('gradeLevel', 'Your grade level value here');
-
-    if (selectedImage) {
-      formData.append('image', selectedImage);
-    }
-
+    setLoadingText("Analyzing your doubt...");
     try {
+      const formData = new FormData();
+      formData.append('subject', 'Your subject value here');
+      formData.append('question', 'Your question value here');
+      formData.append('gradeLevel', 'Your grade level value here');
+
+      if (selectedImage) {
+        formData.append('image', selectedImage);
+      }
+
       const response = await axios.post(solveDoubtRoute, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -219,12 +241,12 @@ export default function DashboardPage() {
         setDoubtSolution(response.data.doubt);
         setIsSolutionModalOpen(true);
       }
-
     } catch (error) {
       console.error('Error solving doubt:', error);
       // You might want to show an error toast here
     } finally {
       setIsLoading(false);
+      setLoadingText(null);
     }
   }
 
@@ -257,6 +279,8 @@ export default function DashboardPage() {
   return (
     <div>
       <Header />
+      {isLoading && <FullPageLoader loadingText={loadingText} />}
+
       <div className="container py-10">
         <div className="flex items-center justify-between mb-10">
           <div>
@@ -329,9 +353,21 @@ export default function DashboardPage() {
                             <Input disabled={isLoading} type="number" defaultValue="5" min="1" max="20" />
                           </div>
                           <div className="flex justify-end">
-                            <Button disabled={isLoading} onClick={handleGenerateQuestions} className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed">
-                              Generate Questions
+                            <Button
+                              disabled={isLoading}
+                              onClick={handleGenerateQuestions}
+                              className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed"
+                            >
+                              {isLoading && loadingText === "Generating questions..." ? (
+                                <div className="flex items-center gap-2">
+                                  <LoadingSpinner className="h-4 w-4" />
+                                  Generating...
+                                </div>
+                              ) : (
+                                "Generate Questions"
+                              )}
                             </Button>
+
                           </div>
                         </TabsContent>
                         <TabsContent value="advanced" className="space-y-4">
@@ -359,8 +395,19 @@ export default function DashboardPage() {
                             </div>
                           </div>
                           <div className="flex justify-end">
-                            <Button disabled={isLoading} onClick={handleGenerateQuestionswithContent} className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed">
-                              Generate Questions
+                            <Button
+                              disabled={isLoading}
+                              onClick={handleGenerateQuestionswithContent}
+                              className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed"
+                            >
+                              {isLoading && loadingText === "Generating questions from content..." ? (
+                                <div className="flex items-center gap-2">
+                                  <LoadingSpinner className="h-4 w-4" />
+                                  Generating...
+                                </div>
+                              ) : (
+                                "Generate Questions"
+                              )}
                             </Button>
                           </div>
                         </TabsContent>
@@ -378,8 +425,19 @@ export default function DashboardPage() {
                           </div>
                         ))}
                         <div className="flex justify-end">
-                          <Button disabled={isLoading} onClick={handleSubmit} className="bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed">
-                            Submit
+                          <Button
+                            onClick={handleSubmit}
+                            disabled={isLoading || answers.some(a => a === -1)}
+                            className="bg-orange-500 hover:bg-orange-600 text-white"
+                          >
+                            {isLoading && loadingText === "Submitting your test..." ? (
+                              <div className="flex items-center gap-2">
+                                <LoadingSpinner className="h-4 w-4" />
+                                Submitting...
+                              </div>
+                            ) : (
+                              "Submit Test"
+                            )}
                           </Button>
                         </div>
                       </div>
@@ -484,9 +542,20 @@ export default function DashboardPage() {
                     <Textarea placeholder="Any specific points you want to include in the lesson plan..." />
                   </div>
                   <div className="flex justify-end">
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                      Generate Lesson Plan
+                    <Button
+                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center gap-2">
+                          <LoadingSpinner className="h-4 w-4" />
+                          Generating...
+                        </div>
+                      ) : (
+                        "Generate Lesson Plan"
+                      )}
                     </Button>
+
                   </div>
                 </CardContent>
               </Card>
@@ -527,8 +596,19 @@ export default function DashboardPage() {
                     <Textarea placeholder="Specific details about the content you want to generate..." />
                   </div>
                   <div className="flex justify-end">
-                    <Button disabled={isLoading} onClick={handleGenerateQuestions} className="bg-orange-500 hover:bg-orange-600 text-white">
-                      Generate Content
+                    <Button
+                      disabled={isLoading}
+                      onClick={handleGenerateQuestions}
+                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center gap-2">
+                          <LoadingSpinner className="h-4 w-4" />
+                          Generating...
+                        </div>
+                      ) : (
+                        "Generate Content"
+                      )}
                     </Button>
                   </div>
                 </CardContent>
@@ -610,8 +690,16 @@ export default function DashboardPage() {
                     <Button
                       className="bg-orange-500 hover:bg-orange-600 text-white"
                       onClick={handleSolveDoubt}
+                      disabled={isLoading}
                     >
-                      Solve Doubt
+                      {isLoading && loadingText === "Analyzing your doubt..." ? (
+                        <div className="flex items-center gap-2">
+                          <LoadingSpinner className="h-4 w-4" />
+                          Analyzing...
+                        </div>
+                      ) : (
+                        "Solve Doubt"
+                      )}
                     </Button>
                   </div>
                 </CardContent>
