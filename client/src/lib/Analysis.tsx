@@ -64,7 +64,7 @@ export default function Analysis({ testData, setIsResult }: { testData: TestData
     if (percentage >= 80) return "bg-green-500";
     if (percentage >= 60) return "bg-blue-500";
     if (percentage >= 40) return "bg-yellow-500";
-    return "bg-red-500";
+    return "bg-red-100";
   };
 
   return (
@@ -328,7 +328,7 @@ export default function Analysis({ testData, setIsResult }: { testData: TestData
                           ? "bg-green-500 "
                           : isUnattempted
                             ? "bg-yellow-500 "
-                            : "bg-red-500 "
+                            : ""
                         }`}
                     >
                       {isCorrect ? "Correct" : isUnattempted ? "Unattempted" : "Incorrect"}
@@ -357,7 +357,7 @@ export default function Analysis({ testData, setIsResult }: { testData: TestData
                               className={`inline-block w-5 h-5 rounded-full mr-3 flex-shrink-0 ${i === q.answer
                                   ? "bg-green-500"
                                   : i === userAnswer
-                                    ? "bg-red-500"
+                                    ? ""
                                     : "bg-gray-300"
                                 }`}
                             ></span>

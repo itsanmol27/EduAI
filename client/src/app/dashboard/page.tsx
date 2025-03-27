@@ -143,16 +143,19 @@ export default function DashboardPage() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
   const [doubtSolution, setDoubtSolution] = useState<DoubtSolution | null>(null);
-  const [language , setLanguage] = useState<string>('English');
+  const [language, setLanguage] = useState<string>('English');
 
   async function handleGenerateQuestions() {
     setIsLoading(true);
-    const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty , language });
+    const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty, language });
 
     if (response.data.status) {
       setQuestions(response.data.test.questions);
       setTestId(response.data.test._id);
       setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
+      // Reset the form fields if needed
+      setSubjects([]);
+      setTopics([]);
     }
     setIsLoading(false);
   }
@@ -165,6 +168,8 @@ export default function DashboardPage() {
       setQuestions(response.data.test.questions);
       setTestId(response.data.test._id);
       setAnswers(Array.from({ length: response.data.test.questions.length }, () => -1));
+      // Reset the content field if needed
+      setContent('');
     }
     setIsLoading(false);
   }
@@ -383,6 +388,76 @@ export default function DashboardPage() {
               </Card>
             )}
 
+            {questions.length > 0 && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="p-6">
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-2xl font-bold">MCQ Test</h2>
+                      <button
+                        onClick={() => {
+                          setQuestions([]);
+                          setAnswers([]);
+                          setTestId([]);
+                        }}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    <div className="space-y-6">
+                      {questions.map((question, questionIndex) => (
+                        <div key={question._id} className="border-b pb-4">
+                          <h3 className="font-semibold mb-3">
+                            {questionIndex + 1}. {question.question}
+                          </h3>
+                          <div className="space-y-2">
+                            {question.options.map((option, optionIndex) => (
+                              <div
+                                key={optionIndex}
+                                className={`p-3 rounded-md cursor-pointer border ${answers[questionIndex] === optionIndex
+                                  ? "border-orange-500 bg-orange-50"
+                                  : "border-gray-200 hover:bg-gray-50"
+                                  }`}
+                                onClick={() => {
+                                  const newAnswers = [...answers];
+                                  newAnswers[questionIndex] = optionIndex;
+                                  setAnswers(newAnswers);
+                                }}
+                              >
+                                {String.fromCharCode(65 + optionIndex)}. {option}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-6">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setQuestions([]);
+                          setAnswers([]);
+                          setTestId([]);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={handleSubmit}
+                        disabled={isLoading || answers.some(a => a === -1)}
+                        className="bg-orange-500 hover:bg-orange-600 text-white"
+                      >
+                        {isLoading ? "Submitting..." : "Submit Test"}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {selectedTool === "lesson-plans" && (
               <Card>
                 <CardHeader>
@@ -427,21 +502,16 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Content Type</label>
-                    <select className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
-                      <option value="mcq">Multiple Choice Questions</option>
-                      <option value="lesson">Lesson Plan</option>
-                      <option value="summary">Topic Summary</option>
-                      <option value="worksheet">Worksheet</option>
-                    </select>
+                    <label className="text-sm font-medium">Subject</label>
+                    <Input disabled={isLoading} placeholder="e.g. Physics, Mathematics, History" onChange={(e) => { setSubjects(e.target.value.split(",")); }} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Subject/Topic</label>
-                    <Input disabled={isLoading} placeholder="e.g. Science, Mathematics, History" />
+                    <label className="text-sm font-medium">Topic</label>
+                    <Input disabled={isLoading} placeholder="e.g. Kinematics, Algebra, American Revolution" onChange={(e) => { setTopics(e.target.value.split(",")); }} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Language</label>
-                    <select onChange={(e)=>{ setLanguage(e.target.value)}} className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
+                    <select onChange={(e) => { setLanguage(e.target.value) }} className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                       <option value="hindi">English</option>
                       <option value="hindi">Hindi</option>
                       <option value="marathi">Marathi</option>
