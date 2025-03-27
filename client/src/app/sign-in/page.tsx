@@ -24,14 +24,14 @@ export default function SignInPage() {
     password: "",
   });
 
-  const changeHandler = (e: any) => {
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("email", credentials.email);
