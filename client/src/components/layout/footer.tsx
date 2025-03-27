@@ -69,11 +69,11 @@ export default function Footer() {
       </p>
 
       <div className="border border-t border-gray-100 text-center flex flex-col items-center space-y-1 text-gray-500 py-4">
-        <p className="mb-3">EduAI is built on top of Open Source package EduAI</p>
+        <p className="mb-3">EduAI is built on top of Open Source package</p>
         <a
           target="_blank"
           className="flex space-x-3 hover:underline underline-offset-4"
-          href="https://github.com/satvik314/EduAI"
+          href="https://github.com/itsanmol27/EduAI"
           rel="noopener noreferrer"
         >
           <svg

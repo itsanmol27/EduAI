@@ -98,7 +98,7 @@ export default function FeaturesPage() {
             Powerful Features for Modern Education
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Explore our range of AI-powered tools designed to revolutionize your teaching experience.
+            Explore our range of AI-powered tools designed to revolutionize your learning experience.
           </p>
         </div>
       </section>

@@ -23,7 +23,7 @@ export default function HomePage() {
               Reimagine Education with AI
             </h1>
             <h2 className="text-2xl md:text-3xl font-bold text-orange-500 mb-4">
-              Teaching Made Easy
+              Learning Made Easy
             </h2>
             <p className="text-gray-600 mb-8">
               Generate educational content easily with EduAI
@@ -69,7 +69,7 @@ export default function HomePage() {
         <div className="container px-4 max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-4">Our Features</h2>
           <p className="text-center text-gray-600 mb-16">
-            Explore our range of AI-powered tools designed to revolutionize your teaching and learning experience.
+            Explore our range of AI-powered tools designed to revolutionize your learning and learning experience.
           </p>
           <FeatureSection />
         </div>
@@ -86,7 +86,7 @@ export default function HomePage() {
               <h2 className="text-3xl font-bold mb-4">Meet EduAI.</h2>
               <h3 className="text-2xl font-bold mb-6">Reimagine Education with AI</h3>
               <p className="text-gray-600 mb-8">
-                Generate a wide range of educational materials tailored to your specific needs and requirements, all with just a few clicks. From MCQs to comprehensive lesson plans, EduAI is here to revolutionize your teaching experience.
+                Generate a wide range of educational materials tailored to your specific needs and requirements, all with just a few clicks. From MCQs to comprehensive lesson plans, EduAI is here to revolutionize your learning experience.
               </p>
               <Link href="/dashboard">
                 <Button className="bg-orange-500 hover:bg-orange-600 text-white">

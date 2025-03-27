@@ -30,7 +30,7 @@ export default function TestimonialSection() {
       id: "sarah",
       name: "Sarah",
       role: "Middle School Teacher",
-      quote: "The advanced analytics have given me incredible insights into my students' progress. I can't imagine teaching without this tool now.",
+      quote: "The advanced analytics have given me incredible insights into my students' progress. I can't imagine learning without this tool now.",
       avatarUrl: "https://web-assets.same.dev/3738101369/4092384792.png",
     },
     {

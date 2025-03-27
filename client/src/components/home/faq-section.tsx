@@ -16,11 +16,11 @@ export default function FaqSection() {
   const faqs: FaqItem[] = [
     {
       question: "What is EduAI?",
-      answer: "EduAI is an AI-powered platform designed to help educators create high-quality educational materials quickly and efficiently. It leverages artificial intelligence to generate multiple-choice questions, lesson plans, assessments, and other teaching resources tailored to specific subjects and learning objectives."
+      answer: "EduAI is an AI-powered platform designed to help educators create high-quality educational materials quickly and efficiently. It leverages artificial intelligence to generate multiple-choice questions, lesson plans, assessments, and other learning resources tailored to specific subjects and learning objectives."
     },
     {
       question: "How does EduAI work?",
-      answer: "EduAI uses advanced AI models to analyze educational content and generate relevant teaching materials. Simply select the subject, topic, and type of content you need, provide any specific requirements, and the AI will create customized educational resources for you. You can then review, edit, and export these materials for use in your teaching."
+      answer: "EduAI uses advanced AI models to analyze educational content and generate relevant learning materials. Simply select the subject, topic, and type of content you need, provide any specific requirements, and the AI will create customized educational resources for you. You can then review, edit, and export these materials for use in your learning."
     },
     {
       question: "What types of content can I generate with EduAI?",
@@ -40,7 +40,7 @@ export default function FaqSection() {
     },
     {
       question: "How do I get started with EduAI?",
-      answer: "Getting started is simple! Sign up for an account, explore the different tools available, and begin creating your first educational resource. Our intuitive interface makes it easy to generate exactly what you need for your teaching objectives."
+      answer: "Getting started is simple! Sign up for an account, explore the different tools available, and begin creating your first educational resource. Our intuitive interface makes it easy to generate exactly what you need for your learning objectives."
     },
     {
       question: "Is there a limit to how much content I can generate?",
@@ -48,7 +48,7 @@ export default function FaqSection() {
     },
     {
       question: "Can I save and edit the generated content?",
-      answer: "Yes, all content generated on EduAI can be saved to your account, edited as needed, and revisited later. You can also export the content in various formats for integration with your existing teaching materials and learning management systems."
+      answer: "Yes, all content generated on EduAI can be saved to your account, edited as needed, and revisited later. You can also export the content in various formats for integration with your existing learning materials and learning management systems."
     },
     {
       question: "Do you offer any training or support?",

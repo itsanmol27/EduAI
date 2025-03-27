@@ -15,7 +15,7 @@ export default function AboutUsPage() {
 
           <div className="max-w-3xl mx-auto">
             <p className="text-gray-700 mb-8">
-              At EduAI, we're on a mission to transform the teaching experience through the power of artificial intelligence.
+              At EduAI, we're on a mission to transform the learning experience through the power of artificial intelligence.
               Founded in 2024, our platform empowers educators worldwide to create high-quality, personalized learning materials
               with unprecedented ease and efficiency.
             </p>
@@ -76,7 +76,7 @@ export default function AboutUsPage() {
           <p className="text-lg max-w-4xl mx-auto text-center">
             We believe that every student deserves access to high-quality, personalized education, and every teacher deserves
             the tools to make that possible. Our mission is to empower educators with AI-driven solutions that enhance their
-            teaching capabilities, save time, and ultimately improve learning outcomes for students.
+            learning capabilities, save time, and ultimately improve learning outcomes for students.
           </p>
         </div>
       </section>
@@ -102,7 +102,7 @@ export default function AboutUsPage() {
               <h3 className="text-xl font-bold mb-4">Customization & Flexibility</h3>
               <p className="text-gray-700">
                 EduAI offers unparalleled customization options, allowing teachers to maintain their personal
-                teaching style while leveraging AI.
+                learning style while leveraging AI.
               </p>
             </div>
           </div>
