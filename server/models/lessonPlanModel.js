@@ -1,104 +1,69 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const lessonPlanSchema = new mongoose.Schema({
   title: {
-    type: String,
-    required: true
+    type: String
   },
   gradeLevel: {
-    type: Number,
-    required: true
+    type: String // Grade level as string (e.g., "10th")
   },
   subject: {
-    type: String,
-    required: true
+    type: String
   },
-  timeAllocation: {
-    type: String,
-    required: true
+  timeAllotment: {
+    type: String // Time allotment from the response
   },
-  objectives: [{
-    type: String,
-    required: true
-  }],
+  objective: {
+    overall: {
+      type: String
+    },
+    specific: [{
+      type: String
+    }]
+  },
   prerequisites: [{
-    type: String,
-    required: true
+    type: String
   }],
   introduction: {
-    type: {
-      type: String,
-      required: true
+    hook: {
+      type: String
     },
-    duration: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
+    overview: {
+      type: String
     }
   },
   contentOutline: [{
     day: {
-      type: Number,
-      required: true
+      type: Number
     },
     topic: {
-      type: String,
-      required: true
+      type: String
     },
-    activities: [{
-      type: String,
-      required: true
-    }]
+    details: {
+      type: String
+    }
   }],
   activities: [{
-    id: {
-      type: String,
-      required: true
+    day: {
+      type: Number
     },
-    name: {
-      type: String,
-      required: true
+    activity: {
+      type: String
     },
-    description: {
-      type: String,
-      required: true
+    materials: {
+      type: String
     }
   }],
   assessment: {
     formative: [{
-      type: String,
-      required: true
+      type: String
     }],
-    summative: {
-      type: {
-        type: String,
-        required: true
-      },
-      description: {
-        type: String,
-        required: true
-      }
-    }
-  },
-  materials: [{
-    type: String,
-    required: true
-  }],
-  differentiation: {
-    support: {
-      type: String,
-      required: true
-    },
-    challenge: {
-      type: String,
-      required: true
-    }
+    summative: [{
+      type: String
+    }]
   }
 });
 
 const LessonPlan = mongoose.model('LessonPlan', lessonPlanSchema);
 
-module.exports = LessonPlan;
+export default LessonPlan

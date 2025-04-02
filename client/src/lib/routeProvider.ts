@@ -6,3 +6,4 @@ export const submitQuestionsRoute = `${BASEURL}/test/submit`;
 export const signUpRoute = `${BASEURL}/auth/signup`
 export const signInRoute = `${BASEURL}/auth/signin`
 export const solveDoubtRoute = `${BASEURL}/doubt/create`
+export const lessonGenerateRoute = `${BASEURL}/lessonPlan/create`

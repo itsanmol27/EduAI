@@ -9,9 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
 import axios from "axios";
-import { generateQuestionsRoute, submitQuestionsRoute, generateQuestionsWithContentRoute, solveDoubtRoute } from "@/lib/routeProvider";
+import { generateQuestionsRoute, submitQuestionsRoute, generateQuestionsWithContentRoute, solveDoubtRoute, lessonGenerateRoute } from "@/lib/routeProvider";
 import Analysis, { TestData } from "@/lib/Analysis";
 import { LoadingSpinner, FullPageLoader } from "@/lib/loading";
+import LessonPlanModal from "@/lib/LessonPlan";
 
 interface QuestionType {
   topic: string;
@@ -28,6 +29,45 @@ export interface DoubtSolution {
   imageText: string;
   answer: string;
   _id: string;
+}
+
+interface LessonPlanModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  lessonPlan: {
+    title: string;
+    gradeLevel: string;
+    subject: string;
+    timeAllotment: string;
+    objective: {
+      overall: string;
+      specific: string[];
+    };
+    prerequisites: string[];
+    introduction: {
+      hook: string;
+      overview: string;
+    };
+    contentOutline: {
+      day: number;
+      topic: string;
+      details: string;
+    }[];
+    activities: {
+      day: number;
+      activity: string;
+      materials: string;
+    }[];
+    assessment: {
+      formative: string[];
+      summative: string[];
+    };
+    differentiation: {
+      support: string;
+      challenge: string;
+    };
+    resources: string[];
+  };
 }
 
 
@@ -146,6 +186,10 @@ export default function DashboardPage() {
   const [doubtSolution, setDoubtSolution] = useState<DoubtSolution | null>(null);
   const [language, setLanguage] = useState<string>('English');
   const [loadingText, setLoadingText] = useState<string | null>(null);
+  const [grade, setGrade] = useState<string>('');
+  const [lessonPlan, setLessonPlan] = useState<any>(null);
+  const [isLessonPlanModalOpen, setIsLessonPlanModalOpen] = useState(false);
+
 
   async function handleGenerateQuestions() {
     setIsLoading(true);
@@ -270,6 +314,29 @@ export default function DashboardPage() {
     formattedText = formattedText.replace(/\n(?!\n)/g, '<br>');
 
     return `<p>${formattedText}</p>`;
+  }
+
+  async function handleGenerateLessonPlan() {
+    setIsLoading(true);
+    setLoadingText("Generating lesson plan...");
+    try {
+      const response = await axios.post(lessonGenerateRoute, { subjects, topics, grade });
+      if (response.data.status) {
+        console.log("Lesson Plan:", response.data.plan);
+        setIsLessonPlanModalOpen(true);
+        setLessonPlan(response.data.plan);
+        setSubjects([]);
+        setTopics([]);
+        setGrade('');
+      }
+    }
+    catch (error) {
+      console.error("Error generating lesson plan:", error);
+    }
+    finally {
+      setIsLoading(false);
+      setLoadingText(null);
+    }
   }
 
   if (isResult && result) {
@@ -527,15 +594,15 @@ export default function DashboardPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Subject</label>
-                    <Input disabled={isLoading} placeholder="e.g. Science, Mathematics, History" />
+                    <Input disabled={isLoading} placeholder="e.g. Science, Mathematics, History" onChange={(e) => { setSubjects(e.target.value.split(",")); }} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Topic/Lesson Title</label>
-                    <Input disabled={isLoading} placeholder="e.g. Photosynthesis, Linear Equations, World War II" />
+                    <Input disabled={isLoading} placeholder="e.g. Photosynthesis, Linear Equations, World War II" onChange={(e) => { setTopics(e.target.value.split(",")); }} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Grade/Age Level</label>
-                    <Input disabled={isLoading} placeholder="e.g. 10th Grade, 8-10 years" />
+                    <Input disabled={isLoading} placeholder="e.g. 10th Grade, 8-10 years" onChange={(e) => { setGrade(e.target.value) }} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Specific Requirements (Optional)</label>
@@ -543,6 +610,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex justify-end">
                     <Button
+                      onClick={handleGenerateLessonPlan}
                       className="bg-orange-500 hover:bg-orange-600 text-white"
                       disabled={isLoading}
                     >
@@ -559,6 +627,14 @@ export default function DashboardPage() {
                   </div>
                 </CardContent>
               </Card>
+            )}
+
+            {isLessonPlanModalOpen && lessonPlan && (
+              <LessonPlanModal
+                isOpen={isLessonPlanModalOpen}
+                onClose={() => setIsLessonPlanModalOpen(false)}
+                lessonPlan={lessonPlan}
+              />
             )}
 
             {selectedTool === "indic-language" && (
