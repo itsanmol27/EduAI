@@ -251,7 +251,7 @@ export default function Analysis({ testData, setIsResult }: { testData: TestData
             </h3>
             <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg">
               <div className="space-y-4">
-                {testData.summeryByAi.Targeted_areas_for_improvement.split("\n")
+                {testData.summeryByAi?.Targeted_areas_for_improvement.split("\n")
                   .filter((item) => item.trim().length > 0)
                   .map((item, index) => {
                     const boldTextMatch = item.match(/\*\*(.*?)\*\*/);
