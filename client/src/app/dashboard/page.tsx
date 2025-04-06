@@ -70,6 +70,41 @@ interface LessonPlanModalProps {
   };
 }
 
+interface LessonPlanType{
+  title: string;
+    gradeLevel: string;
+    subject: string;
+    timeAllotment: string;
+    objective: {
+      overall: string;
+      specific: string[];
+    };
+    prerequisites: string[];
+    introduction: {
+      hook: string;
+      overview: string;
+    };
+    contentOutline: {
+      day: number;
+      topic: string;
+      details: string;
+    }[];
+    activities: {
+      day: number;
+      activity: string;
+      materials: string;
+    }[];
+    assessment: {
+      formative: string[];
+      summative: string[];
+    };
+    differentiation: {
+      support: string;
+      challenge: string;
+    };
+    resources: string[];
+}
+
 
 const tools = [
   {
@@ -187,7 +222,7 @@ export default function DashboardPage() {
   const [language, setLanguage] = useState<string>('English');
   const [loadingText, setLoadingText] = useState<string | null>(null);
   const [grade, setGrade] = useState<string>('');
-  const [lessonPlan, setLessonPlan] = useState<any>(null);
+  const [lessonPlan, setLessonPlan] = useState<LessonPlanType>();
   const [isLessonPlanModalOpen, setIsLessonPlanModalOpen] = useState(false);
 
 
