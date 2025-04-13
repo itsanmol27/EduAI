@@ -7,7 +7,7 @@ import generateQuestionwithContext from "../utils/generateQuestionwithContext.js
 const router = Router();
 
 router.post("/generate" , async (req,res) => {
-    let {difficulty , subjects , topics , language} = req.body;
+    let {userId , difficulty , subjects , topics , language} = req.body;
     subjects = Array.isArray(subjects) ? subjects : [subjects];
     topics = Array.isArray(topics) ? topics : [topics];
     const question = await generateQuestion(difficulty , subjects , topics , language);
@@ -21,7 +21,7 @@ router.post("/generate" , async (req,res) => {
     try {
         const questions = JSON.parse(questionContent);
         console.log(JSON.stringify(questions));
-        const testData = {userId:"1" , questions}
+        const testData = {userId , questions}
         const newtest = new Test(testData)
         const test = await newtest.save();
         res.status(200).json({ test, status:true });
@@ -32,7 +32,7 @@ router.post("/generate" , async (req,res) => {
 })
 
 router.post("/generate/content" , async (req,res) => {
-    const {content, difficulty} = req.body;
+    const {userId, content, difficulty} = req.body;
 
     const question = await generateQuestionwithContext(difficulty , content);
 
@@ -45,7 +45,7 @@ router.post("/generate/content" , async (req,res) => {
     try {
         const questions = JSON.parse(questionContent);
         console.log(JSON.stringify(questions));
-        const testData = {userId:"1" , questions}
+        const testData = {userId , questions}
         const newtest = new Test(testData)
         const test = await newtest.save();
         res.status(200).json({ test, status:true });

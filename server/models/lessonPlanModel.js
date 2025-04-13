@@ -5,13 +5,13 @@ const lessonPlanSchema = new mongoose.Schema({
     type: String
   },
   gradeLevel: {
-    type: String // Grade level as string (e.g., "10th")
+    type: String
   },
   subject: {
     type: String
   },
   timeAllotment: {
-    type: String // Time allotment from the response
+    type: String
   },
   objective: {
     overall: {

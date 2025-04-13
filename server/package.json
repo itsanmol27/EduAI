@@ -20,6 +20,7 @@
     "tesseract.js": "^6.0.0"
   },
   "scripts": {
-    "start": "nodemon ./api/server.js"
+    "start": "node ./api/server.js",
+    "dev":"nodemon ./api/server.js"
   }
 }

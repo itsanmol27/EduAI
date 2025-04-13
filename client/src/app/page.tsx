@@ -15,7 +15,6 @@ export default function HomePage() {
   return (
     <div>
       <Header />
-      {/* Hero Section */}
       <section className="py-12 md:py-20">
         <div className="container px-4 max-w-7xl mx-auto">
           <div className="text-center mb-8">

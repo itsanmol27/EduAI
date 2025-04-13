@@ -14,19 +14,26 @@ async function analyseTestusingAi(test) {
                     ${JSON.stringify(test.topicsPerformance)}
                     Please generate a performance analysis with specific remarks on strengths, weaknesses,
                     and targeted areas for improvement. Make the feedback concise, with a focus on the most
-                    important points. Generate a JSON of the analysis that will include Performance_Analysis ,Strengths, Weaknesses,
-                    and targeted_areas_for_improvement in string format.`,
+                    important points. 
+                    
+                    Generate a JSON object strictly in the following format:
+                    {
+                      "Performance_Analysis": "string",
+                      "Strengths": "string",
+                      "Weaknesses": "string",
+                      "Targeted_areas_for_Improvement": "string"
+                    }`
     ],
   ];
 
   try {
     const response = await llm.invoke(messages);
-    
+
     let summaryContent = response.content.trim();
     summaryContent = summaryContent
-    .replace(/```json/g, "")
-    .replace(/```/g, "");
-    
+      .replace(/```json/g, "")
+      .replace(/```/g, "");
+
     test.summeryByAi = JSON.parse(summaryContent);
     console.log(summaryContent);
 

@@ -14,14 +14,14 @@ const summarySchema = new mongoose.Schema({
 } , {id:false});
 
 const AiSchema = new mongoose.Schema({
-  Targeted_areas_for_improvement: { type: String},
+  Targeted_areas_for_Improvement: { type: String},
   Strengths: { type: String },
   Weaknesses: { type: String },
   Performance_Analysis: { type: String }
 } , {id:false});
 
 const testSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, required: true },
   questions: [testQuestionSchema],
   answers: [Number],
   score: { type: Number },

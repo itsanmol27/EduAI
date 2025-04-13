@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const doubtSchema = new mongoose.Schema({
-    userId:{type:String, required:true},
+    userId:{type:mongoose.Schema.Types.ObjectId, required:true},
     imageUrl:{type:String , required:true},
     imageText:{type:String , required:true},
     answer:{type:String},

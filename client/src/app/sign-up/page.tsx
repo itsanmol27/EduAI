@@ -13,19 +13,21 @@ import {
 import { Label } from "@/components/ui/label";
 import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { signUpRoute } from "@/lib/routeProvider";
 import { GoogleAuthProvider } from "firebase/auth";
 import { getAuth, signInWithPopup } from "firebase/auth";
 import app from "@/lib/Firebase";
 import { useRouter } from "next/navigation";
+import { UserContext } from "@/context/UserContext";
 
 export default function SignUpPage() {
 
   const [name , setName] = useState("");
   const [password , setPassword] = useState("");
   const [email , setEmail] = useState("");
+  const {setUser} = useContext(UserContext);
 
   const provider = new GoogleAuthProvider();
   const auth = getAuth(app);
@@ -43,6 +45,7 @@ export default function SignUpPage() {
     console.log(response.data);
     if(response.data.status){
       localStorage.setItem("user" , JSON.stringify(response.data.user));
+      setUser(response.data.user);
       router.push("/dashboard");
     }
   }

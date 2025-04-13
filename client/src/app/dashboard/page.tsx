@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +13,7 @@ import { generateQuestionsRoute, submitQuestionsRoute, generateQuestionsWithCont
 import Analysis, { TestData } from "@/lib/Analysis";
 import { LoadingSpinner, FullPageLoader } from "@/lib/loading";
 import LessonPlanModal from "@/lib/LessonPlan";
+import { UserContext } from "@/context/UserContext";
 
 interface QuestionType {
   topic: string;
@@ -29,45 +30,6 @@ export interface DoubtSolution {
   imageText: string;
   answer: string;
   _id: string;
-}
-
-interface LessonPlanModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  lessonPlan: {
-    title: string;
-    gradeLevel: string;
-    subject: string;
-    timeAllotment: string;
-    objective: {
-      overall: string;
-      specific: string[];
-    };
-    prerequisites: string[];
-    introduction: {
-      hook: string;
-      overview: string;
-    };
-    contentOutline: {
-      day: number;
-      topic: string;
-      details: string;
-    }[];
-    activities: {
-      day: number;
-      activity: string;
-      materials: string;
-    }[];
-    assessment: {
-      formative: string[];
-      summative: string[];
-    };
-    differentiation: {
-      support: string;
-      challenge: string;
-    };
-    resources: string[];
-  };
 }
 
 interface LessonPlanType{
@@ -224,6 +186,7 @@ export default function DashboardPage() {
   const [grade, setGrade] = useState<string>('');
   const [lessonPlan, setLessonPlan] = useState<LessonPlanType>();
   const [isLessonPlanModalOpen, setIsLessonPlanModalOpen] = useState(false);
+  const {user} = useContext(UserContext);
 
 
   async function handleGenerateQuestions() {
@@ -231,7 +194,7 @@ export default function DashboardPage() {
     setLoadingText("Generating questions...");
 
     try {
-      const response = await axios.post(generateQuestionsRoute, { subjects, topics, difficulty, language });
+      const response = await axios.post(generateQuestionsRoute, { userId:user?._id ,subjects, topics, difficulty, language });
       if (response.data.status) {
         setQuestions(response.data.test.questions);
         setTestId(response.data.test._id);
@@ -253,7 +216,7 @@ export default function DashboardPage() {
     setIsLoading(true);
     setLoadingText("Generating questions from content...");
     try {
-      const response = await axios.post(generateQuestionsWithContentRoute, { content, difficulty });
+      const response = await axios.post(generateQuestionsWithContentRoute, { userId:user?._id ,content, difficulty });
       if (response.data.status) {
         setQuestions(response.data.test.questions);
         setTestId(response.data.test._id);
@@ -262,7 +225,6 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.error("Error generating questions:", error);
-      // You might want to show an error toast here
     } finally {
       setIsLoading(false);
       setLoadingText(null);
@@ -290,7 +252,6 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.error("Error submitting test:", error);
-      // You might want to show an error toast here
     } finally {
       setIsLoading(false);
       setLoadingText(null);
@@ -435,7 +396,6 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   {
-                    questions.length === 0 ?
                       <Tabs defaultValue="simple">
                         <TabsList className="mb-4">
                           <TabsTrigger value="simple">Simple</TabsTrigger>
@@ -514,35 +474,35 @@ export default function DashboardPage() {
                           </div>
                         </TabsContent>
                       </Tabs>
-                      :
-                      <div className=" flex flex-col gap-4">
-                        {questions.map((question, questionIndex) => (
-                          <div key={questionIndex}>
-                            <div className=" font-semibold"><span className=" font-medium">{questionIndex + 1}.</span> {question.question}</div>
-                            <div className=" flex flex-wrap">
-                              {question.options.map((option, ansindex) => (
-                                <button disabled={isLoading} onClick={() => { handleSelectOption(questionIndex, ansindex) }} className={` text-left font-medium text-sm w-[48%] bg-gray-100 text-black m-1 py-2 px-4 rounded-md hover:bg-orange-500 hover:text-white disabled:cursor-not-allowed ${answers[questionIndex] === ansindex ? " bg-orange-500 text-white" : ""}`} key={ansindex}><span>{ansindex + 1}. </span>{option}</button>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                        <div className="flex justify-end">
-                          <Button
-                            onClick={handleSubmit}
-                            disabled={isLoading || answers.some(a => a === -1)}
-                            className="bg-orange-500 hover:bg-orange-600 text-white"
-                          >
-                            {isLoading && loadingText === "Submitting your test..." ? (
-                              <div className="flex items-center gap-2">
-                                <LoadingSpinner className="h-4 w-4" />
-                                Submitting...
-                              </div>
-                            ) : (
-                              "Submit Test"
-                            )}
-                          </Button>
-                        </div>
-                      </div>
+                      
+                      // <div className=" flex flex-col gap-4">
+                      //   {questions.map((question, questionIndex) => (
+                      //     <div key={questionIndex}>
+                      //       <div className=" font-semibold"><span className=" font-medium">{questionIndex + 1}.</span> {question.question}</div>
+                      //       <div className=" flex flex-wrap">
+                      //         {question.options.map((option, ansindex) => (
+                      //           <button disabled={isLoading} onClick={() => { handleSelectOption(questionIndex, ansindex) }} className={` text-left font-medium text-sm w-[48%] bg-gray-100 text-black m-1 py-2 px-4 rounded-md hover:bg-orange-500 hover:text-white disabled:cursor-not-allowed ${answers[questionIndex] === ansindex ? " bg-orange-500 text-white" : ""}`} key={ansindex}><span>{ansindex + 1}. </span>{option}</button>
+                      //         ))}
+                      //       </div>
+                      //     </div>
+                      //   ))}
+                      //   <div className="flex justify-end">
+                      //     <Button
+                      //       onClick={handleSubmit}
+                      //       disabled={isLoading || answers.some(a => a === -1)}
+                      //       className="bg-orange-500 hover:bg-orange-600 text-white"
+                      //     >
+                      //       {isLoading && loadingText === "Submitting your test..." ? (
+                      //         <div className="flex items-center gap-2">
+                      //           <LoadingSpinner className="h-4 w-4" />
+                      //           Submitting...
+                      //         </div>
+                      //       ) : (
+                      //         "Submit Test"
+                      //       )}
+                      //     </Button>
+                      //   </div>
+                      // </div>
                   }
                 </CardContent>
               </Card>
@@ -574,9 +534,10 @@ export default function DashboardPage() {
                           </h3>
                           <div className="space-y-2">
                             {question.options.map((option, optionIndex) => (
-                              <div
+                              <button
                                 key={optionIndex}
-                                className={`p-3 rounded-md cursor-pointer border ${answers[questionIndex] === optionIndex
+                                disabled={isLoading}
+                                className={`p-3 rounded-md border w-full text-left disabled:cursor-not-allowed ${answers[questionIndex] === optionIndex
                                   ? "border-orange-500 bg-orange-50"
                                   : "border-gray-200 hover:bg-gray-50"
                                   }`}
@@ -587,7 +548,7 @@ export default function DashboardPage() {
                                 }}
                               >
                                 {String.fromCharCode(65 + optionIndex)}. {option}
-                              </div>
+                              </button>
                             ))}
                           </div>
                         </div>

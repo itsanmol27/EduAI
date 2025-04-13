@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       "source.unsplash.com",
       "images.unsplash.com",
       "web-assets.same.dev",
+      "lh3.googleusercontent.com",
     ],
     remotePatterns: [
       {
